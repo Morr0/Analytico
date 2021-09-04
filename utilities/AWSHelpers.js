@@ -1,0 +1,1 @@
+module.exports.getDynamoDBTableName = (stage, name) => `Analytico-${stage}-${name}`;

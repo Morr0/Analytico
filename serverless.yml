@@ -1,0 +1,29 @@
+service: analytico
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+
+functions:
+  hello:
+    handler: handler.createUser
+    events:
+      - httpApi:
+          path: /users/create
+          method: POST
+      - cloudwatchLog:
+          logGroup: /aws/lambda/analytico/createUser
+    environment:
+      SECRET: ${ssm:createUserSecret}
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        TableName: Analytico-${self:custom.stage}-users
