@@ -1,25 +1,28 @@
 const AWS = require('aws-sdk');
 const uuid = require('uuid');
-const bcrypt = require('bcrypt');
 
-const HASH_ROUNDS = 15;
+const {getUsersTable} = require('../utilities/AWSHelpers');
 
 module.exports.createUser = async ({
-    name
+	name
 }) => {
     
-    const clientId = `${uuid.v4()}${uuid.v2()}`;
-    const clientSecret = `${uuid.v5(clientId, name)}${uuid.v4()}`
-    const clientSecretHash = await bcrypt.hash(clientSecret, HASH_ROUNDS);
-    
-    const dynamoDBClient = new AWS.DynamoDB();
-    const date = new Date();
-    const data = {
-        name,
-        id: uuid.v4(),
-        createdAt: date,
-        modifiedAt: date,
-        clientId,
-        clientSecret
-    };
+	const apiKey = uuid.v4();
+	
+	const date = new Date().toISOString();
+	const data = {
+		id: uuid.v4(),
+		name,
+		createdAt: date,
+		modifiedAt: date,
+		apiKey
+	};
+	
+	const dynamoDBClient = new AWS.DynamoDB.DocumentClient();
+	await dynamoDBClient.put({
+		Item: data,
+		TableName: getUsersTable()
+	}).promise();
+
+	return apiKey;
 };

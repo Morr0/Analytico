@@ -1,1 +1,1 @@
-module.exports.getDynamoDBTableName = (stage, name) => `Analytico-${stage}-${name}`;
+module.exports.getUsersTable = () => `Analytico-${ENV}-users`;

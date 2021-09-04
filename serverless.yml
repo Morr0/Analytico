@@ -4,7 +4,11 @@ frameworkVersion: '2'
 provider:
   name: aws
   runtime: nodejs12.x
+  region: ap-southeast-2
+  stage: staging
   lambdaHashingVersion: 20201221
+  environment:
+    ENV: ${opt:stage}
 
 functions:
   hello:
@@ -13,10 +17,12 @@ functions:
       - httpApi:
           path: /users/create
           method: POST
-      - cloudwatchLog:
-          logGroup: /aws/lambda/analytico/createUser
     environment:
-      SECRET: ${ssm:createUserSecret}
+      SECRET: ${ssm:Analytico-${opt:stage, 'staging'}-createUser-secret}
+
+plugins:
+  - serverless-offline
+
 resources:
   Resources:
     UsersTable:
@@ -26,4 +32,7 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-        TableName: Analytico-${self:custom.stage}-users
+        TableName: Analytico-${opt:stage, 'staging'}-users
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S

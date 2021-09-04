@@ -1,0 +1,32 @@
+{
+  "name": "Analytico",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "aws-sdk": "^2.983.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "serverless-offline": "^8.0.0",
+    "serverless-offline-ssm": "^5.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:staging": "cross-env LOCAL=\"true\" serverless offline --stage staging",
+    "start:production": "cross-env LOCAL=\"true\" serverless offline --stage production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Morr0/Analytico.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Morr0/Analytico/issues"
+  },
+  "homepage": "https://github.com/Morr0/Analytico#readme"
+}
