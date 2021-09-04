@@ -87,10 +87,22 @@
               }
             }
           },
-          "HelloLogGroup": {
+          "CreateUnderscoreuserLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/analytico-staging-hello"
+              "LogGroupName": "/aws/lambda/analytico-staging-create_user"
+            }
+          },
+          "CreateUnderscoreprojectLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/analytico-staging-create_project"
+            }
+          },
+          "ListUnderscoreprojectLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/analytico-staging-list_project"
             }
           },
           "IamRoleLambdaExecution": {
@@ -170,18 +182,18 @@
               }
             }
           },
-          "HelloLambdaFunction": {
+          "CreateUnderscoreuserLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
               "Code": {
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/analytico/staging/1630740892598-2021-09-04T07:34:52.598Z/analytico.zip"
+                "S3Key": "serverless/analytico/staging/1630743425994-2021-09-04T08:17:05.994Z/analytico.zip"
               },
               "Handler": "handler.createUser",
               "Runtime": "nodejs12.x",
-              "FunctionName": "analytico-staging-hello",
+              "FunctionName": "analytico-staging-create_user",
               "MemorySize": 1024,
               "Timeout": 6,
               "Environment": {
@@ -198,17 +210,97 @@
               }
             },
             "DependsOn": [
-              "HelloLogGroup"
+              "CreateUnderscoreuserLogGroup"
             ]
           },
-          "HelloLambdaVersionmnqFxcC65aRzSFrCbG7vrMFFm6vpS4QH3vtcWGKXY": {
+          "CreateUnderscoreprojectLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/analytico/staging/1630743425994-2021-09-04T08:17:05.994Z/analytico.zip"
+              },
+              "Handler": "handler.createWebsiteAnalyticsProject",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "analytico-staging-create_project",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "ENV": "staging"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "CreateUnderscoreprojectLogGroup"
+            ]
+          },
+          "ListUnderscoreprojectLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/analytico/staging/1630743425994-2021-09-04T08:17:05.994Z/analytico.zip"
+              },
+              "Handler": "handler.listWebsiteAnalyticsProjects",
+              "Runtime": "nodejs12.x",
+              "FunctionName": "analytico-staging-list_project",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "ENV": "staging"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "ListUnderscoreprojectLogGroup"
+            ]
+          },
+          "CreateUnderscoreuserLambdaVersionkG2mMgHUnpHEjpShzeGvgCOvt8o1qNEs7wZRU3UcRU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
-                "Ref": "HelloLambdaFunction"
+                "Ref": "CreateUnderscoreuserLambdaFunction"
               },
-              "CodeSha256": "X4MP5ek2a5qNeDzQDseoETR4Ln+eu1oTPGhtdzsMsUU="
+              "CodeSha256": "/WoHGUirEBqmllgfVybissB9aDlmPYgVKY+Xxv18hfM="
+            }
+          },
+          "CreateUnderscoreprojectLambdaVersionCUjAHRzOoMyZ3KI4aQrJHuagC9vtR8938QbcLcl0": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CreateUnderscoreprojectLambdaFunction"
+              },
+              "CodeSha256": "/WoHGUirEBqmllgfVybissB9aDlmPYgVKY+Xxv18hfM="
+            }
+          },
+          "ListUnderscoreprojectLambdaVersionUiKk82Y0LCqWWoouAAnMTghcgEkwSXaVcAt5U51C04": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ListUnderscoreprojectLambdaFunction"
+              },
+              "CodeSha256": "/WoHGUirEBqmllgfVybissB9aDlmPYgVKY+Xxv18hfM="
             }
           },
           "HttpApi": {
@@ -231,12 +323,12 @@
               }
             }
           },
-          "HelloLambdaPermissionHttpApi": {
+          "CreateUnderscoreuserLambdaPermissionHttpApi": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "FunctionName": {
                 "Fn::GetAtt": [
-                  "HelloLambdaFunction",
+                  "CreateUnderscoreuserLambdaFunction",
                   "Arn"
                 ]
               },
@@ -268,7 +360,7 @@
               }
             }
           },
-          "HttpApiIntegrationHello": {
+          "HttpApiIntegrationCreateUnderscoreuser": {
             "Type": "AWS::ApiGatewayV2::Integration",
             "Properties": {
               "ApiId": {
@@ -276,32 +368,176 @@
               },
               "IntegrationType": "AWS_PROXY",
               "IntegrationUri": {
-                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"HelloLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"CreateUnderscoreuserLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
               },
               "PayloadFormatVersion": "2.0",
               "TimeoutInMillis": 6500
             }
           },
-          "HttpApiRoutePostUsersCreate": {
+          "HttpApiRoutePostUsers": {
             "Type": "AWS::ApiGatewayV2::Route",
             "Properties": {
               "ApiId": {
                 "Ref": "HttpApi"
               },
-              "RouteKey": "POST /users/create",
+              "RouteKey": "POST /users",
               "Target": {
                 "Fn::Join": [
                   "/",
                   [
                     "integrations",
                     {
-                      "Ref": "HttpApiIntegrationHello"
+                      "Ref": "HttpApiIntegrationCreateUnderscoreuser"
                     }
                   ]
                 ]
               }
             },
-            "DependsOn": "HttpApiIntegrationHello"
+            "DependsOn": "HttpApiIntegrationCreateUnderscoreuser"
+          },
+          "CreateUnderscoreprojectLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CreateUnderscoreprojectLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationCreateUnderscoreproject": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"CreateUnderscoreprojectLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 6500
+            }
+          },
+          "HttpApiRoutePostProjects": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /projects",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationCreateUnderscoreproject"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationCreateUnderscoreproject"
+          },
+          "ListUnderscoreprojectLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ListUnderscoreprojectLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationListUnderscoreproject": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"ListUnderscoreprojectLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 6500
+            }
+          },
+          "HttpApiRouteGetProjects": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /projects",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationListUnderscoreproject"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationListUnderscoreproject"
           },
           "UsersTable": {
             "Type": "AWS::DynamoDB::Table",
@@ -321,6 +557,33 @@
                 }
               ]
             }
+          },
+          "WebsiteAnalyticsProjectsTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "BillingMode": "PAY_PER_REQUEST",
+              "KeySchema": [
+                {
+                  "AttributeName": "userId",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "website",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "TableName": "Analytico-staging-websiteAnalyticsProjects",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "userId",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "website",
+                  "AttributeType": "S"
+                }
+              ]
+            }
           }
         },
         "Outputs": {
@@ -332,13 +595,31 @@
               "Name": "sls-analytico-staging-ServerlessDeploymentBucketName"
             }
           },
-          "HelloLambdaFunctionQualifiedArn": {
+          "CreateUnderscoreuserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersionmnqFxcC65aRzSFrCbG7vrMFFm6vpS4QH3vtcWGKXY"
+              "Ref": "CreateUnderscoreuserLambdaVersionkG2mMgHUnpHEjpShzeGvgCOvt8o1qNEs7wZRU3UcRU"
             },
             "Export": {
-              "Name": "sls-analytico-staging-HelloLambdaFunctionQualifiedArn"
+              "Name": "sls-analytico-staging-CreateUnderscoreuserLambdaFunctionQualifiedArn"
+            }
+          },
+          "CreateUnderscoreprojectLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CreateUnderscoreprojectLambdaVersionCUjAHRzOoMyZ3KI4aQrJHuagC9vtR8938QbcLcl0"
+            },
+            "Export": {
+              "Name": "sls-analytico-staging-CreateUnderscoreprojectLambdaFunctionQualifiedArn"
+            }
+          },
+          "ListUnderscoreprojectLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ListUnderscoreprojectLambdaVersionUiKk82Y0LCqWWoouAAnMTghcgEkwSXaVcAt5U51C04"
+            },
+            "Export": {
+              "Name": "sls-analytico-staging-ListUnderscoreprojectLambdaFunctionQualifiedArn"
             }
           },
           "HttpApiId": {
@@ -466,28 +747,68 @@
     ],
     "pluginsData": {},
     "functions": {
-      "hello": {
+      "create_user": {
         "handler": "handler.createUser",
         "events": [
           {
             "httpApi": {
-              "path": "/users/create",
+              "path": "/users",
               "method": "POST"
             },
             "resolvedMethod": "POST",
-            "resolvedPath": "/users/create"
+            "resolvedPath": "/users"
           }
         ],
         "environment": {
           "SECRET": "%fdfdDSlkj;gf#dsdsA0932"
         },
-        "name": "analytico-staging-hello",
+        "name": "analytico-staging-create_user",
         "package": {},
         "memory": 1024,
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersionmnqFxcC65aRzSFrCbG7vrMFFm6vpS4QH3vtcWGKXY"
+        "versionLogicalId": "CreateUnderscoreuserLambdaVersionkG2mMgHUnpHEjpShzeGvgCOvt8o1qNEs7wZRU3UcRU"
+      },
+      "create_project": {
+        "handler": "handler.createWebsiteAnalyticsProject",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/projects",
+              "method": "POST"
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/projects"
+          }
+        ],
+        "name": "analytico-staging-create_project",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {},
+        "versionLogicalId": "CreateUnderscoreprojectLambdaVersionCUjAHRzOoMyZ3KI4aQrJHuagC9vtR8938QbcLcl0"
+      },
+      "list_project": {
+        "handler": "handler.listWebsiteAnalyticsProjects",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/projects",
+              "method": "GET"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/projects"
+          }
+        ],
+        "name": "analytico-staging-list_project",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs12.x",
+        "vpc": {},
+        "versionLogicalId": "ListUnderscoreprojectLambdaVersionUiKk82Y0LCqWWoouAAnMTghcgEkwSXaVcAt5U51C04"
       }
     },
     "resources": {
@@ -506,6 +827,33 @@
             "AttributeDefinitions": [
               {
                 "AttributeName": "id",
+                "AttributeType": "S"
+              }
+            ]
+          }
+        },
+        "WebsiteAnalyticsProjectsTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "BillingMode": "PAY_PER_REQUEST",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "website",
+                "KeyType": "RANGE"
+              }
+            ],
+            "TableName": "Analytico-staging-websiteAnalyticsProjects",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "userId",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "website",
                 "AttributeType": "S"
               }
             ]
@@ -539,7 +887,7 @@
     "artifact": "C:\\Users\\Rami\\Analytico\\.serverless\\analytico.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/analytico/staging/1630740892598-2021-09-04T07:34:52.598Z",
+    "artifactDirectoryName": "serverless/analytico/staging/1630743425994-2021-09-04T08:17:05.994Z",
     "artifact": "analytico.zip"
   }
 }

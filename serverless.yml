@@ -11,14 +11,26 @@ provider:
     ENV: ${opt:stage}
 
 functions:
-  hello:
+  create_user:
     handler: handler.createUser
     events:
       - httpApi:
-          path: /users/create
+          path: /users
           method: POST
     environment:
       SECRET: ${ssm:Analytico-${opt:stage, 'staging'}-createUser-secret}
+  create_project:
+    handler: handler.createWebsiteAnalyticsProject
+    events:
+      - httpApi:
+          path: /projects
+          method: POST
+  list_project:
+    handler: handler.listWebsiteAnalyticsProjects
+    events:
+      - httpApi:
+          path: /projects
+          method: GET
 
 plugins:
   - serverless-offline
@@ -35,4 +47,19 @@ resources:
         TableName: Analytico-${opt:stage, 'staging'}-users
         AttributeDefinitions:
           - AttributeName: id
+            AttributeType: S
+    WebsiteAnalyticsProjectsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: website
+            KeyType: RANGE
+        TableName: Analytico-${opt:stage, 'stage'}-websiteAnalyticsProjects
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: website
             AttributeType: S
